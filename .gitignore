@@ -17,9 +17,7 @@ yarn-error.log*
 **/google-services.json
 **/GoogleService-Info.plist
 
-# Exclude embedded git repositories
-Gen-AI-powered-/
-youth-wellness-hack/
+# Note: Gen-AI-powered- and youth-wellness-hack are now included as regular folders
 
 
 # Python
