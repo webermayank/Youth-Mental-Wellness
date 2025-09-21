@@ -4,6 +4,7 @@ import {
   getDailyTip,
   getNews,
   getMoodTrends,
+  getWeather,
 } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import Calendar from "../components/Calendar";
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [dailyTip, setDailyTip] = useState(null);
   const [news, setNews] = useState([]);
   const [moodTrends, setMoodTrends] = useState(null);
+  const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
 
@@ -21,17 +23,20 @@ export default function Dashboard() {
     const loadData = async () => {
       try {
         const userId = currentUser?.uid || "anonymous";
-        const [checkins, tip, newsData, trends] = await Promise.all([
-          getCheckins(userId).catch(() => []),
-          getDailyTip().catch(() => null),
-          getNews().catch(() => ({ items: [] })),
-          getMoodTrends(userId).catch(() => null),
-        ]);
+        const [checkins, tip, newsData, trends, weatherData] =
+          await Promise.all([
+            getCheckins(userId).catch(() => []),
+            getDailyTip().catch(() => null),
+            getNews().catch(() => ({ items: [] })),
+            getMoodTrends(userId).catch(() => null),
+            getWeather("Delhi").catch(() => null), // Default to Delhi, can be made dynamic
+          ]);
 
         setItems(checkins);
         setDailyTip(tip);
         setNews(newsData.items || []);
         setMoodTrends(trends);
+        setWeather(weatherData);
       } catch (error) {
         console.error("Error loading dashboard data:", error);
       } finally {
@@ -161,6 +166,84 @@ export default function Dashboard() {
               </div>
               <Calendar checkins={items} />
             </div>
+
+            {/* Weather-Based Wellness Tips */}
+            {weather && (
+              <div className="bg-gradient-to-br from-blue-100 to-cyan-100 p-6 rounded-3xl shadow-xl border border-blue-200/50 mt-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-xl">🌤️</span>
+                  <h3 className="text-xl font-bold text-gray-800">
+                    Weather & Wellness
+                  </h3>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Weather Info */}
+                  <div className="flex items-center justify-between p-4 bg-white/60 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="text-3xl">
+                        {weather.desc?.includes("rain")
+                          ? "🌧️"
+                          : weather.desc?.includes("sun")
+                          ? "☀️"
+                          : weather.desc?.includes("cloud")
+                          ? "☁️"
+                          : weather.desc?.includes("clear")
+                          ? "☀️"
+                          : "🌤️"}
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold text-gray-800">
+                          {Math.round(weather.temp_c)}°C
+                        </div>
+                        <div className="text-sm text-gray-600 capitalize">
+                          {weather.desc}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Weather-based Wellness Suggestion */}
+                  <div className="p-4 bg-white/60 rounded-xl">
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">💡</span>
+                      <div>
+                        <div className="font-semibold text-gray-800 mb-1">
+                          Weather-Based Wellness Tip
+                        </div>
+                        <div className="text-sm text-gray-700 leading-relaxed">
+                          {weather.suggestion}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Weather Tips */}
+                  <div className="text-xs text-gray-600 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span>🌡️</span>
+                      <span>
+                        {weather.temp_c > 30
+                          ? "Hot weather - stay hydrated and seek shade"
+                          : weather.temp_c < 15
+                          ? "Cool weather - perfect for outdoor activities"
+                          : "Pleasant weather - great for outdoor wellness activities"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span>🧘</span>
+                      <span>
+                        {weather.desc?.includes("rain")
+                          ? "Indoor meditation and breathing exercises recommended"
+                          : weather.desc?.includes("sun")
+                          ? "Sunlight exposure can boost mood and vitamin D"
+                          : "Consider outdoor mindfulness or gentle exercise"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Side Panel */}

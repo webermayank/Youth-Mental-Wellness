@@ -1,22 +1,27 @@
 const { Firestore } = require("@google-cloud/firestore");
 const FIRESTORE_ENABLED = process.env.FIRESTORE_ENABLED === "true" || true; // Force enable for now
 const PROJECT_ID = process.env.PROJECT_ID || "askai-health-wellness";
-const path = require("path");
 
 let db = null;
 
 function getDb() {
   if (!db && FIRESTORE_ENABLED) {
-    // Use the service account file we downloaded
-    const keyPath = path.resolve(
-      __dirname,
-      "../../askai-health-wellness-firebase-adminsdk-fbsvc-223bd1f707.json"
-    );
+    // Use environment variables for Google Cloud authentication
+    const credentials = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
 
-    db = new Firestore({
-      projectId: PROJECT_ID,
-      keyFilename: keyPath,
-    });
+    if (credentials) {
+      // Parse the JSON credentials from environment variable
+      const serviceAccount = JSON.parse(credentials);
+      db = new Firestore({
+        projectId: PROJECT_ID,
+        credentials: serviceAccount,
+      });
+    } else {
+      // Fallback to default credentials (for local development)
+      db = new Firestore({
+        projectId: PROJECT_ID,
+      });
+    }
   }
   return db;
 }
