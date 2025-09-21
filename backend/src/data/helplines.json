@@ -1,0 +1,41 @@
+{
+  "crisis_helplines": [
+    {
+      "name": "National Suicide Prevention Lifeline",
+      "number": "988",
+      "description": "24/7 crisis support and suicide prevention"
+    },
+    {
+      "name": "Crisis Text Line",
+      "number": "Text HOME to 741741",
+      "description": "24/7 crisis support via text"
+    },
+    {
+      "name": "National Alliance on Mental Illness (NAMI)",
+      "number": "1-800-950-NAMI (6264)",
+      "description": "Mental health support and resources"
+    },
+    {
+      "name": "SAMHSA National Helpline",
+      "number": "1-800-662-4357",
+      "description": "Substance abuse and mental health services"
+    },
+    {
+      "name": "Emergency Services",
+      "number": "911",
+      "description": "For immediate life-threatening emergencies"
+    }
+  ],
+  "international_helplines": [
+    {
+      "name": "International Association for Suicide Prevention",
+      "website": "https://www.iasp.info/resources/Crisis_Centres/",
+      "description": "Global directory of crisis centers"
+    },
+    {
+      "name": "Befrienders Worldwide",
+      "website": "https://www.befrienders.org/",
+      "description": "Emotional support worldwide"
+    }
+  ]
+}

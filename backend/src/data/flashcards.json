@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "question": "What is the recommended breathing technique for anxiety?",
+    "options": [
+      "Box breathing: inhale 4, hold 4, exhale 4, hold 4",
+      "Quick shallow breaths",
+      "Hold your breath for 10 seconds",
+      "Breathe only through your mouth"
+    ],
+    "answer": 0,
+    "difficulty": "easy",
+    "category": "anxiety",
+    "explanation": "Box breathing helps regulate your nervous system and reduce anxiety by slowing down your heart rate."
+  },
+  {
+    "id": 2,
+    "question": "What should you do when feeling overwhelmed?",
+    "options": [
+      "Try to do everything at once",
+      "Write down tasks and prioritize them, focusing on one at a time",
+      "Ignore the tasks completely",
+      "Ask someone else to do everything"
+    ],
+    "answer": 1,
+    "difficulty": "easy",
+    "category": "stress",
+    "explanation": "Breaking tasks into manageable pieces and prioritizing helps reduce overwhelm and increases productivity."
+  },
+  {
+    "id": 3,
+    "question": "How can sunlight help with depression?",
+    "options": [
+      "It doesn't help at all",
+      "It only helps in summer",
+      "Sunlight helps boost mood and energy by regulating serotonin",
+      "You need to stare directly at the sun"
+    ],
+    "answer": 2,
+    "difficulty": "medium",
+    "category": "depression",
+    "explanation": "Natural sunlight helps regulate your circadian rhythm and increases serotonin production, which can improve mood."
+  },
+  {
+    "id": 4,
+    "question": "What is progressive muscle relaxation?",
+    "options": [
+      "Tensing all muscles at once",
+      "Tensing and releasing each muscle group slowly from toes upward",
+      "Only relaxing your face muscles",
+      "Stretching for 2 hours straight"
+    ],
+    "answer": 1,
+    "difficulty": "medium",
+    "category": "stress",
+    "explanation": "Progressive muscle relaxation helps release physical tension and promotes overall relaxation by systematically working through muscle groups."
+  },
+  {
+    "id": 5,
+    "question": "What should you do if you're having thoughts of self-harm?",
+    "options": [
+      "Keep it to yourself",
+      "Call a helpline or trusted person immediately",
+      "Wait for the thoughts to pass",
+      "Try to ignore them"
+    ],
+    "answer": 1,
+    "difficulty": "easy",
+    "category": "crisis",
+    "explanation": "It's important to reach out for help immediately. Crisis helplines are available 24/7 and your life is valuable."
+  },
+  {
+    "id": 6,
+    "question": "How can gratitude journaling help with happiness?",
+    "options": [
+      "It doesn't help",
+      "It only works for some people",
+      "It helps shift focus to positive aspects and enhances well-being",
+      "You need to write 100 things daily"
+    ],
+    "answer": 2,
+    "difficulty": "easy",
+    "category": "happiness",
+    "explanation": "Gratitude journaling helps rewire your brain to focus on positive experiences, increasing overall happiness and life satisfaction."
+  },
+  {
+    "id": 7,
+    "question": "What is the best approach to handle anger?",
+    "options": [
+      "Suppress it completely",
+      "Express it immediately without thinking",
+      "Use safe physical activity or journaling to release it healthily",
+      "Ignore it and hope it goes away"
+    ],
+    "answer": 2,
+    "difficulty": "medium",
+    "category": "anger",
+    "explanation": "Healthy anger management involves acknowledging the feeling and finding constructive ways to express and release it."
+  },
+  {
+    "id": 8,
+    "question": "What should you do when feeling lonely?",
+    "options": [
+      "Isolate yourself more",
+      "Reach out to a trusted friend or family member",
+      "Only use social media",
+      "Wait for others to contact you"
+    ],
+    "answer": 1,
+    "difficulty": "easy",
+    "category": "loneliness",
+    "explanation": "Social connection is crucial for mental health. Even a simple message or call can help reduce feelings of loneliness."
+  },
+  {
+    "id": 9,
+    "question": "How can music therapy help with mood?",
+    "options": [
+      "Only classical music works",
+      "Music has no effect on mood",
+      "Music can soothe, energize, or help process emotions",
+      "You need to play an instrument"
+    ],
+    "answer": 2,
+    "difficulty": "easy",
+    "category": "mood",
+    "explanation": "Music can directly affect your nervous system and emotional state, making it a powerful tool for mood regulation."
+  },
+  {
+    "id": 10,
+    "question": "What is the purpose of a grounding exercise?",
+    "options": [
+      "To make you dizzy",
+      "To help you focus on the present moment and feel safe",
+      "To make you fall asleep",
+      "To increase anxiety"
+    ],
+    "answer": 1,
+    "difficulty": "medium",
+    "category": "anxiety",
+    "explanation": "Grounding exercises help anchor you in the present moment, reducing anxiety and panic by focusing on your immediate environment."
+  }
+]
