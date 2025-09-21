@@ -1,29 +1,104 @@
 {
   "crisis_helplines": [
     {
-      "name": "National Suicide Prevention Lifeline",
-      "number": "988",
-      "description": "24/7 crisis support and suicide prevention"
+      "name": "National Emergency",
+      "number": "112",
+      "description": "Single emergency number for all emergencies"
     },
     {
-      "name": "Crisis Text Line",
-      "number": "Text HOME to 741741",
-      "description": "24/7 crisis support via text"
+      "name": "Police",
+      "number": "100",
+      "description": "Police emergency services"
     },
     {
-      "name": "National Alliance on Mental Illness (NAMI)",
-      "number": "1-800-950-NAMI (6264)",
-      "description": "Mental health support and resources"
+      "name": "Fire",
+      "number": "101",
+      "description": "Fire emergency services"
     },
     {
-      "name": "SAMHSA National Helpline",
-      "number": "1-800-662-4357",
-      "description": "Substance abuse and mental health services"
+      "name": "Ambulance",
+      "number": "102",
+      "description": "Medical emergency and ambulance services"
     },
     {
-      "name": "Emergency Services",
-      "number": "911",
-      "description": "For immediate life-threatening emergencies"
+      "name": "Women Helpline",
+      "number": "1091",
+      "description": "Women in distress helpline"
+    },
+    {
+      "name": "Women Helpline - Domestic Abuse",
+      "number": "181",
+      "description": "24/7 helpline for domestic abuse victims"
+    },
+    {
+      "name": "Children Helpline",
+      "number": "1098",
+      "description": "24/7 helpline for children in difficult situations"
+    },
+    {
+      "name": "KIRAN Mental Health Helpline",
+      "number": "1800-599-0019",
+      "description": "24/7 mental health support and crisis intervention"
+    },
+    {
+      "name": "AASRA Suicide Prevention",
+      "number": "+91-22-27546669",
+      "description": "Crisis intervention and suicide prevention"
+    },
+    {
+      "name": "SNEHA Suicide Prevention",
+      "number": "+91 44 24640050",
+      "description": "24/7 suicide prevention and emotional support"
+    },
+    {
+      "name": "Vandrevala Foundation Helpline",
+      "number": "+91 9999666555",
+      "description": "Mental health support and counseling"
+    },
+    {
+      "name": "iCall Psychosocial Helpline",
+      "number": "+91-22-25521111",
+      "description": "Mental health counseling and support"
+    },
+    {
+      "name": "Sanjivini Society for Mental Health (Delhi)",
+      "number": "011-23389090",
+      "description": "Mental health support in Delhi"
+    },
+    {
+      "name": "Roshni Helpline (Hyderabad)",
+      "number": "+91-40-7904646",
+      "description": "Regional mental health support in Hyderabad"
+    },
+    {
+      "name": "SAHAI Helpline (Bangalore)",
+      "number": "+91 80 25497777",
+      "description": "Regional mental health support in Bangalore"
+    },
+    {
+      "name": "Medical Helpline",
+      "number": "108",
+      "description": "Medical emergency helpline for multiple states"
+    },
+    {
+      "name": "AIDS Helpline",
+      "number": "1097",
+      "description": "HIV/AIDS support and information"
+    },
+    {
+      "name": "Anti Poison (New Delhi)",
+      "number": "1066 or 011-1066",
+      "description": "Poison control and emergency treatment"
+    },
+    {
+      "name": "Air Ambulance",
+      "number": "9540161344",
+      "description": "Air ambulance services"
+    },
+    {
+      "name": "Senior Citizen Helpline",
+      "number": "1091/1291",
+      "description": "Support for senior citizens"
     }
   ],
   "international_helplines": [

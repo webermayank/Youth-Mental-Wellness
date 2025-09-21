@@ -7,38 +7,17 @@ export default function Tips() {
   const [mood, setMood] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
 
-  // Helper function to parse CSV-like tip data
+  // Helper function to parse tip data
   const parseTipData = (tipData) => {
     if (!tipData) return null;
 
-    // If tip is already an object with the right structure
-    if (tipData.tip && typeof tipData.tip === "object" && tipData.tip.text) {
+    // If tip is already an object with the right structure, return as is
+    if (tipData.tip && typeof tipData.tip === "object") {
       return tipData;
     }
 
-    // If tip.text is a CSV string, parse it
-    if (tipData.tip && typeof tipData.tip.text === "string") {
-      const csvLine = tipData.tip.text;
-
-      // Split by comma but handle quoted content
-      const parts = csvLine.split(",");
-
-      if (parts.length >= 4) {
-        return {
-          tip: {
-            id: parts[0],
-            category: parts[1],
-            title: parts[2],
-            text: parts[3], // This is the actual tip content
-            duration: parts[4] ? `${parts[4]} min` : "",
-            language: parts[5] || "English",
-          },
-        };
-      }
-    }
-
-    // Fallback: return as is
-    return tipData;
+    // Fallback: wrap in tip object
+    return { tip: tipData };
   };
 
   const loadTip = async (moodFilter = "") => {
