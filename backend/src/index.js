@@ -79,6 +79,11 @@ app.use("/", checkinRouter);
 
 app.get("/", (req, res) => res.send("Server is UP — Express backend running"));
 
-app.listen(PORT, () => {
-  console.log(`Backend listening on ${PORT} (ENV=${process.env.ENV})`);
-});
+// For Vercel deployment, export the app instead of starting a server
+if (process.env.NODE_ENV === "production") {
+  module.exports = app;
+} else {
+  app.listen(PORT, () => {
+    console.log(`Backend listening on ${PORT} (ENV=${process.env.ENV})`);
+  });
+}
