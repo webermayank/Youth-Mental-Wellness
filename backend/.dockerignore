@@ -1,3 +1,11 @@
 node_modules
 npm-debug.log
-gcloud services enable run.googleapis.com \ artifactregistry.googleapis.com \ aiplatform.googleapis.com \ firestore.googleapis.com
+.git
+.gitignore
+README.md
+.env
+.nyc_output
+coverage
+.nyc_output
+.coverage
+.coverage/

@@ -1,0 +1,23 @@
+{
+  "name": "askai_health_modified",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  }
+,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webermayank/Youth-Mental-Wellness.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/webermayank/Youth-Mental-Wellness/issues"
+  },
+  "homepage": "https://github.com/webermayank/Youth-Mental-Wellness#readme"
+}

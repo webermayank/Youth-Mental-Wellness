@@ -1,0 +1,9 @@
+flask
+flask-cors
+google-cloud-aiplatform>=1.38
+pandas
+python-dotenv
+joblib
+scikit-learn
+numpy
+gunicorn

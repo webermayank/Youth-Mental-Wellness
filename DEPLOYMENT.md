@@ -1,46 +1,63 @@
 # Deployment Guide for AskAI Health Project
 
-## Environment Variables Required
+## Architecture
 
-### Backend Environment Variables
+- **Frontend**: Deployed on Vercel (React + Vite)
+- **Backend**: Deployed on Google Cloud Run (Node.js + Express)
 
-- `NODE_ENV`: Set to `production`
-- `PORT`: Set to `8000` (or let Vercel handle it)
-- `FRONTEND_ORIGIN`: Your Vercel app URL (e.g., `https://your-app.vercel.app`)
-- `PROJECT_ID`: Google Cloud Project ID (`askai-health-wellness`)
-- `FIRESTORE_ENABLED`: Set to `true`
-- `GOOGLE_APPLICATION_CREDENTIALS_JSON`: The entire contents of your service account JSON file as a string
+## Backend Deployment (Google Cloud)
+
+### Prerequisites
+
+1. Google Cloud CLI installed and authenticated
+2. Google Cloud project: `healthmoodapp`
+3. Service account key file in `backend/` directory
+
+### Environment Variables for Backend
+
+- `NODE_ENV`: `production`
+- `PORT`: `8000`
+- `FRONTEND_ORIGIN`: Your Vercel frontend URL
+- `PROJECT_ID`: `healthmoodapp`
+- `FIRESTORE_ENABLED`: `true`
 - `NEWSAPI_KEY`: Your News API key
 - `OPENWEATHER_API_KEY`: Your OpenWeather API key
 
-### Frontend Environment Variables
+### Deploy Backend
 
-- `VITE_API_BASE`: Your Vercel app URL with `/api` (e.g., `https://your-app.vercel.app/api`)
+```bash
+cd backend
+./deploy.sh
+```
 
-## Deployment Steps
+This will:
 
-1. Install Vercel CLI: `npm install -g vercel`
-2. Login to Vercel: `vercel login`
-3. Deploy: `vercel --prod`
-4. Configure environment variables in Vercel dashboard
-5. Redeploy if needed: `vercel --prod`
+1. Build Docker container
+2. Push to Google Container Registry
+3. Deploy to Cloud Run
+4. Provide the backend URL
 
-## Google Cloud Setup
+## Frontend Deployment (Vercel)
 
-Make sure your Google Cloud service account key file is properly configured:
+### Environment Variables for Frontend
 
-- File: `backend/askai-health-wellness-firebase-adminsdk-fbsvc-223bd1f707.json`
-- Project ID: `askai-health-wellness`
+- `VITE_API_BASE`: Your Google Cloud backend URL (e.g., `https://askai-health-backend-xxx.run.app`)
+
+### Deploy Frontend
+
+1. Connect GitHub repository to Vercel
+2. Set environment variable `VITE_API_BASE` to your backend URL
+3. Deploy automatically on push to main branch
 
 ## API Endpoints
 
-The backend will be available at `/api/*` routes:
+The backend will be available at your Google Cloud URL:
 
-- `/api/checkin` - Check-in functionality
-- `/api/weather` - Weather data
-- `/api/news` - News data
-- `/api/flashcard` - Flashcard functionality
-- `/api/dailytip` - Daily health tips
-- `/api/feedback` - Feedback submission
-- `/api/mood_trends` - Mood trends
-- `/api/summarize` - Text summarization
+- `https://your-backend-url.run.app/api/checkin` - Check-in functionality
+- `https://your-backend-url.run.app/api/weather` - Weather data
+- `https://your-backend-url.run.app/api/news` - News data
+- `https://your-backend-url.run.app/api/flashcard` - Flashcard functionality
+- `https://your-backend-url.run.app/api/dailytip` - Daily health tips
+- `https://your-backend-url.run.app/api/feedback` - Feedback submission
+- `https://your-backend-url.run.app/api/mood_trends` - Mood trends
+- `https://your-backend-url.run.app/api/summarize` - Text summarization

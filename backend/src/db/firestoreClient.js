@@ -1,6 +1,6 @@
 const { Firestore } = require("@google-cloud/firestore");
-const FIRESTORE_ENABLED = process.env.FIRESTORE_ENABLED === "true" || true; // Force enable for now
-const PROJECT_ID = process.env.PROJECT_ID || "askai-health-wellness";
+const FIRESTORE_ENABLED = process.env.FIRESTORE_ENABLED === "true";
+const PROJECT_ID = process.env.PROJECT_ID || "healthmoodapp";
 
 let db = null;
 

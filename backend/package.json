@@ -9,6 +9,11 @@
     "lint": "echo 'add linter later'",
     "test": "echo 'add tests later'"
   },
+  "env": {
+    "ML_SERVICE_URL": "https://ml-service-358309174344.asia-south1.run.app",
+    "PORT": "8000",
+    "FRONTEND_ORIGIN": "http://localhost:5173"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

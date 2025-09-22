@@ -4,14 +4,14 @@ const cors = require("cors");
 const helmet = require("helmet");
 const { PORT = 8000, FRONTEND_ORIGIN } = process.env;
 const healthRouter = require("./routes/healthroutes");
-// const aiRouter = require('./routes/ai');
+const aiRouter = require("./routes/ai");
 const weatherRouter = require("./routes/weather");
 const newsRouter = require("./routes/news");
 const flashRouter = require("./routes/flashcard");
 const tipsRouter = require("./routes/tips");
 const feedbackRouter = require("./routes/feedback");
 const trendsRouter = require("./routes/trends");
-const summarizeRoutes = require("./routes/summarize");
+// const summarizeRoutes = require("./routes/summarize"); // Removed - using ML service
 const checkinRouter = require("./routes/checkin");
 
 const app = express();
@@ -61,14 +61,16 @@ app.use(
       FRONTEND_ORIGIN || "http://localhost:5173",
       "http://localhost:5175",
       "http://localhost:4000",
+      "https://youth-mental-wellness.vercel.app", // Your Vercel frontend URL
+      "https://*.vercel.app", // Allow all Vercel preview URLs
     ],
     credentials: true,
   })
 );
 
 app.use("/", healthRouter);
-// app.use('/', aiRouter);
-app.use("/", summarizeRoutes);
+app.use("/", aiRouter);
+// app.use("/", summarizeRoutes); // Removed - now using ML service in ai.js
 app.use("/", weatherRouter);
 app.use("/", newsRouter);
 app.use("/", flashRouter);
@@ -79,11 +81,7 @@ app.use("/", checkinRouter);
 
 app.get("/", (req, res) => res.send("Server is UP — Express backend running"));
 
-// For Vercel deployment, export the app instead of starting a server
-if (process.env.NODE_ENV === "production") {
-  module.exports = app;
-} else {
-  app.listen(PORT, () => {
-    console.log(`Backend listening on ${PORT} (ENV=${process.env.ENV})`);
-  });
-}
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Backend listening on ${PORT} (ENV=${process.env.ENV})`);
+});
