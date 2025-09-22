@@ -43,7 +43,9 @@ export default function MoodCard({
               >
                 <span className="mr-3 text-lg">🎵</span>
                 <span className="font-medium">
-                  {url.includes("playlist") ? "Spotify Playlist" : "Spotify Track"}
+                  {url.includes("playlist")
+                    ? "Spotify Playlist"
+                    : "Spotify Track"}
                 </span>
                 <span className="ml-3 text-sm opacity-70">↗</span>
               </a>
