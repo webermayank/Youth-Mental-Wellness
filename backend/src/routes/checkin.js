@@ -4,12 +4,23 @@ const { saveCheckin, getDb } = require("../db/firestoreClient");
 const { callPythonMl } = require("../services/pythonClient");
 const helplines = require("../data/helplines.json");
 
-const FIRESTORE_ENABLED = process.env.FIRESTORE_ENABLED === "true" || true; // Force enable for now
+const FIRESTORE_ENABLED = process.env.FIRESTORE_ENABLED === "true";
+
+// Simple in-memory storage for demo purposes
+const checkinStorage = new Map();
 
 // POST /api/checkin - Create a new check-in
 router.post("/api/checkin", async (req, res) => {
   try {
-    const { user_id, text, quick_emojis = [] } = req.body;
+    const {
+      user_id,
+      text,
+      quick_emojis = [],
+      mood,
+      affirmation,
+      safety_flag,
+      playlist,
+    } = req.body;
 
     if (!text || text.trim().length < 2) {
       return res
@@ -17,88 +28,36 @@ router.post("/api/checkin", async (req, res) => {
         .json({ error: "Text is required and must be at least 2 characters" });
     }
 
-    // Use Python ML service to analyze mood and generate response
-    let mlResult = {
-      mood: "neutral",
-      message: "Thanks for checking in!",
-      playlist: [],
-    };
-
-    try {
-      console.log("Calling Python ML service with text:", text);
-      const pythonResponse = await callPythonMl(text);
-      console.log("Python ML service returned:", pythonResponse);
-
-      // Map Python response to expected format
-      mlResult = {
-        mood: pythonResponse.mood_bucket?.toLowerCase() || "neutral",
-        message: pythonResponse.affirmation || "Thanks for checking in!",
-        playlist: pythonResponse.playlist_url
-          ? [{ id: pythonResponse.playlist_url, label: "Mood Playlist" }]
-          : [],
-        safety_flag: pythonResponse.safety_flag || "safe",
-        helplines:
-          pythonResponse.safety_flag === "flag"
-            ? helplines.crisis_helplines
-            : null,
-      };
-      console.log("Mapped ML result:", mlResult);
-    } catch (error) {
-      console.error("Python ML service failed with full error:", error);
-      console.warn("Python ML service failed, using fallback:", error.message);
-      // Simple fallback mood detection based on keywords
-      const lowerText = text.toLowerCase();
-      if (
-        lowerText.includes("happy") ||
-        lowerText.includes("great") ||
-        lowerText.includes("good")
-      ) {
-        mlResult.mood = "happy";
-        mlResult.message = "Great to hear you're feeling positive!";
-      } else if (
-        lowerText.includes("sad") ||
-        lowerText.includes("down") ||
-        lowerText.includes("depressed")
-      ) {
-        mlResult.mood = "sad";
-        mlResult.message =
-          "I'm sorry you're feeling down. Remember, it's okay to not be okay.";
-      } else if (
-        lowerText.includes("stressed") ||
-        lowerText.includes("anxious") ||
-        lowerText.includes("worried")
-      ) {
-        mlResult.mood = "stressed";
-        mlResult.message =
-          "Stress is normal. Try some deep breathing or take a short break.";
-      } else if (
-        lowerText.includes("tired") ||
-        lowerText.includes("exhausted") ||
-        lowerText.includes("sleepy")
-      ) {
-        mlResult.mood = "tired";
-        mlResult.message =
-          "Rest is important for your wellbeing. Consider getting some sleep.";
-      }
-    }
-
+    // Use the data passed from the frontend (already processed by ML service)
     const checkinData = {
       user_id,
       text,
       quick_emojis,
-      mood: mlResult.mood || "neutral",
-      message: mlResult.message || "Thanks for checking in!",
-      playlist: mlResult.playlist || [],
+      mood: mood || "neutral",
+      message: affirmation || "Thanks for checking in!",
+      playlist: playlist || [],
+      safety_flag: safety_flag || "safe",
       timestamp: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     };
 
-    // Save to Firestore if enabled
+    // Save to Firestore if enabled, otherwise use in-memory storage
     if (FIRESTORE_ENABLED) {
       console.log(`Saving checkin for user: ${user_id}`);
       await saveCheckin(user_id, checkinData);
       console.log(`Checkin saved successfully for user: ${user_id}`);
     } else {
-      console.log("Firestore disabled - checkin not saved");
+      // Use in-memory storage for demo
+      if (!checkinStorage.has(user_id)) {
+        checkinStorage.set(user_id, []);
+      }
+      const userCheckins = checkinStorage.get(user_id);
+      checkinData.id = `checkin_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+      userCheckins.unshift(checkinData); // Add to beginning
+      checkinStorage.set(user_id, userCheckins);
+      console.log(`Checkin saved to memory for user: ${user_id}`);
     }
 
     res.json({
@@ -106,7 +65,7 @@ router.post("/api/checkin", async (req, res) => {
       message: checkinData.message,
       playlist: checkinData.playlist,
       safety_flag: checkinData.safety_flag,
-      helplines: checkinData.helplines,
+      timestamp: checkinData.timestamp,
     });
   } catch (error) {
     console.error("Check-in error:", error);
@@ -119,27 +78,17 @@ router.get("/api/checkins", async (req, res) => {
   try {
     const { userId = "demo_user", limit = 20 } = req.query;
     console.log(
-      `Fetching checkins for user: ${userId}, Firestore enabled: true`
+      `Fetching checkins for user: ${userId}, Firestore enabled: ${FIRESTORE_ENABLED}`
     );
 
     if (!FIRESTORE_ENABLED) {
-      // Return demo data when Firestore is disabled
-      const demoCheckins = [
-        {
-          id: "1",
-          mood: "happy",
-          message: "Feeling great today!",
-          timestamp: new Date(Date.now() - 86400000).toISOString(),
-        },
-        {
-          id: "2",
-          mood: "neutral",
-          message: "Just checking in",
-          timestamp: new Date(Date.now() - 172800000).toISOString(),
-        },
-      ];
-      console.log("Returning demo data - Firestore disabled");
-      return res.json(demoCheckins);
+      // Use in-memory storage
+      const userCheckins = checkinStorage.get(userId) || [];
+      const limitedCheckins = userCheckins.slice(0, parseInt(limit));
+      console.log(
+        `Returning ${limitedCheckins.length} checkins from memory for user: ${userId}`
+      );
+      return res.json(limitedCheckins);
     }
 
     const db = getDb();

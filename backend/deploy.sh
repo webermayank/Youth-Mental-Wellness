@@ -1,30 +1,35 @@
 #!/bin/bash
 
-# Google Cloud deployment script for AskAI Health Backend
+# Backend Deployment Script for Google Cloud Run
+# This script builds and deploys the backend service
 
-# Set variables
+set -e
+
+# Configuration
 PROJECT_ID="healthmoodapp"
 SERVICE_NAME="askai-health-backend"
-REGION="us-central1"
+REGION="asia-south1"
+IMAGE_NAME="gcr.io/$PROJECT_ID/$SERVICE_NAME"
 
-echo "🚀 Starting deployment to Google Cloud..."
+echo "🚀 Starting backend deployment..."
 
 # Set the project
+echo "📋 Setting project to $PROJECT_ID"
 gcloud config set project $PROJECT_ID
 
-# Enable required APIs
-echo "📋 Enabling required APIs..."
-gcloud services enable cloudbuild.googleapis.com
-gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
+# Build the image
+echo "🔨 Building Docker image..."
+gcloud builds submit --tag $IMAGE_NAME
 
-# Build and deploy using Cloud Build
-echo "🔨 Building and deploying with Cloud Build..."
-gcloud builds submit --config cloudbuild.yaml .
+# Deploy to Cloud Run
+echo "🚀 Deploying to Cloud Run..."
+gcloud run deploy $SERVICE_NAME \
+  --image $IMAGE_NAME \
+  --platform managed \
+  --region $REGION \
+  --allow-unauthenticated \
+  --port 8000 \
+  --set-env-vars ML_SERVICE_URL=https://ml-service-358309174344.asia-south1.run.app,NODE_ENV=production,FRONTEND_ORIGIN=https://youth-mental-wellness.vercel.app,FIRESTORE_ENABLED=false
 
-# Get the service URL
-SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format="value(status.url)")
-
-echo "✅ Deployment completed!"
-echo "🌐 Backend URL: $SERVICE_URL"
-echo "📝 Update your frontend VITE_API_BASE to: $SERVICE_URL"
+echo "✅ Backend deployment completed!"
+echo "🌐 Service URL: https://$SERVICE_NAME-$(gcloud config get-value project | tr ':' '-').$REGION.run.app"

@@ -219,8 +219,24 @@ def generate_affirmation(user_text: str, mood_bucket: str) -> (str, str):
     # Fallback to CSV-based selection if ALLOW_FALLBACK
     if ALLOW_FALLBACK and full_df is not None:
         try:
-            rows = full_df[full_df.get("mood_bucket", "") == mood_bucket]
+            # Map mood_bucket to CSV mood_tag format (lowercase)
+            mood_mapping = {
+                "Happy": "happy",
+                "Sad": "sad", 
+                "Anxious": "anxious",
+                "Angry": "angry",
+                "Fearful": "fearful",
+                "Urgent": "suicidal",
+                "Neutral": "confused"
+            }
+            csv_mood = mood_mapping.get(mood_bucket, mood_bucket.lower())
+            
+            rows = full_df[full_df.get("mood_tag", "") == csv_mood]
             if rows is None or len(rows) == 0:
+                # Try with original mood_bucket if mapping fails
+                rows = full_df[full_df.get("mood_tag", "") == mood_bucket.lower()]
+            if rows is None or len(rows) == 0:
+                # Fallback to any row
                 rows = full_df
             rec = rows.sample(1).iloc[0]
             text = rec.get("text") if "text" in rec else rec.get("affirmation", "Be kind to yourself today.")

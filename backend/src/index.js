@@ -57,14 +57,39 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      FRONTEND_ORIGIN || "http://localhost:5173",
-      "http://localhost:5175",
-      "http://localhost:4000",
-      "https://youth-mental-wellness.vercel.app", // Your Vercel frontend URL
-      "https://*.vercel.app", // Allow all Vercel preview URLs
-    ],
+    origin: function (origin, callback) {
+      console.log("CORS request from origin:", origin);
+
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5175",
+        "http://localhost:4000",
+        "https://youth-mental-wellness.vercel.app",
+        "https://askai-health-frontend.vercel.app",
+        "https://askai-health.vercel.app",
+      ];
+
+      // Check if origin is in allowed list
+      if (allowedOrigins.includes(origin)) {
+        console.log("CORS: Origin allowed:", origin);
+        return callback(null, true);
+      }
+
+      // Check if it's a Vercel preview URL
+      if (origin.includes(".vercel.app")) {
+        console.log("CORS: Vercel preview URL allowed:", origin);
+        return callback(null, true);
+      }
+
+      console.log("CORS: Origin blocked:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 

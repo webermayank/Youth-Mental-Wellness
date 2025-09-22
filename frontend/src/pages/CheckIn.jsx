@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ChatInput from "../components/ChatInput";
 import MoodCard from "../components/MoodCard";
-import { postCheckin } from "../services/api";
+import { summarizeText, postCheckin } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 
 export default function CheckIn() {
@@ -17,15 +17,44 @@ export default function CheckIn() {
     }
     setLoading(true);
     try {
+      // First, get mood analysis from the ML service
+      const moodAnalysis = await summarizeText(text);
+
+      // Then save the check-in with the analysis
       const payload = {
         user_id: currentUser?.uid || "anonymous",
         text,
         quick_emojis: [],
+        mood: moodAnalysis.mood,
+        affirmation: moodAnalysis.affirmation,
+        safety_flag: moodAnalysis.safety_flag,
+        playlist: moodAnalysis.playlist,
       };
-      const res = await postCheckin(payload);
-      setResponse(res);
+
+      // Save the check-in (optional - for tracking)
+      try {
+        await postCheckin(payload);
+      } catch (saveError) {
+        console.warn("Failed to save check-in:", saveError);
+        // Continue even if save fails
+      }
+
+      // Set the response for display
+      setResponse({
+        mood: moodAnalysis.mood,
+        message: moodAnalysis.affirmation,
+        playlist: moodAnalysis.playlist,
+        safety_flag: moodAnalysis.safety_flag,
+        helplines:
+          moodAnalysis.safety_flag === "flag"
+            ? [
+                "National Suicide Prevention Lifeline: 988",
+                "Crisis Text Line: Text HOME to 741741",
+              ]
+            : [],
+      });
     } catch (e) {
-      console.error(e);
+      console.error("Error in mood analysis:", e);
       alert("Oops! Something went wrong. Let's try that again 🔄");
     } finally {
       setLoading(false);

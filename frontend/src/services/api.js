@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  "https://askai-health-backend-358309174344.asia-south1.run.app";
 
 // Check-in related APIs
 async function postCheckin(payload) {
@@ -78,13 +80,27 @@ async function getMoodTrends(userId) {
 
 // Text summarization API
 async function summarizeText(text) {
+  console.log("API_BASE:", API_BASE);
+  console.log("Calling summarizeText with:", text);
+
   const res = await fetch(`${API_BASE}/api/summarize`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error("Failed to summarize text");
-  return res.json();
+
+  console.log("Response status:", res.status);
+  console.log("Response headers:", res.headers);
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("API Error:", errorText);
+    throw new Error(`Failed to summarize text: ${res.status} - ${errorText}`);
+  }
+
+  const data = await res.json();
+  console.log("API Response:", data);
+  return data;
 }
 
 export {
